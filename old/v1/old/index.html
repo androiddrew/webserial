@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scrollable Element with Autoscroll</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        #container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        #top-half {
+            flex: 1;
+            padding: 20px;
+        }
+        #scrollable-element {
+            flex: 1;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            padding: 10px;
+            background-color: #e2e8f0;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div id="top-half">
+            <h1>Scrollable Element Demo</h1>
+            <label>
+                <input type="checkbox" id="autoscroll-checkbox" checked> Autoscroll
+            </label>
+        </div>
+        <div id="scrollable-element"></div>
+    </div>
+
+    <script>
+        const scrollableElement = document.getElementById('scrollable-element');
+        const autoscrollCheckbox = document.getElementById('autoscroll-checkbox');
+        let autoscroll = true;
+
+        autoscrollCheckbox.addEventListener('change', (e) => {
+            autoscroll = e.target.checked;
+            if (autoscroll) {
+                scrollToBottom();
+            }
+        });
+
+        function addText() {
+            const newText = document.createElement('p');
+            newText.textContent = `New text added at ${new Date().toLocaleTimeString()}`;
+            scrollableElement.appendChild(newText);
+
+            if (autoscroll) {
+                scrollToBottom();
+            }
+        }
+
+        function scrollToBottom() {
+            scrollableElement.scrollTop = scrollableElement.scrollHeight;
+        }
+
+        // Simulate adding text every 2 seconds
+        setInterval(addText, 2000);
+    </script>
+</body>
+</html>

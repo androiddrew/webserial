@@ -6,8 +6,8 @@
     <title>Web Serial Console</title>
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
-  <body class="h-full m-0 p-0 bg-neutral-100">
-    <div class="flex flex-col h-screen" id="container">
+  <body class="h-full m-0 p-0 bg-neutral-100 mx-5">
+    <div class="flex flex-col h-3/4" id="container">
       <div class="p-5" id="top-half">
         <h1 class="text-3xl font-bold mb-4">Web Serial Console</h1>
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 space-y-4 md:space-y-0">
@@ -15,12 +15,9 @@
             <div class="flex flex-col md:flex-row items-start md:items-center space-y-4 md:space-y-0 md:space-x-4">
               <label for="serial-select" class="text-sm font-medium leading-6 text-gray-900">Port:</label>
               <select id="serial-select" name="serial-select" class="font-medium bg-white block w-full md:w-auto rounded-sm border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-red-500 sm:text-sm sm:leading-6">
-                <option value="">Select a device...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
+                <option value="">Add a device...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
               </select>
               <button id="add-port" class="ml-2 p-1 bg-gray-200 rounded-sm hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50">
-                <!-- <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="4">
-                  <path stroke-linecap="square" stroke-linejoin="round" d="M12 4v16m8-8H4" />
-                </svg> -->
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                 </svg>                
@@ -43,18 +40,18 @@
                 <option value="">921600</option>
               </select>
             </div>
-            <button id="connect-button" class="px-4 py-1 bg-red-500 text-white rounded-sm hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50">Connect</button>
+            <button id="connect-button" class="px-4 py-1 bg-emerald-500 text-white rounded-sm hover:bg-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-opacity-50">Connect</button>
           </div>
           <div class="flex flex-col md:flex-row items-start md:items-center space-y-4 md:space-y-0 md:space-x-4">
             <label class="flex items-center space-x-2">
               <input type="checkbox" id="autoscroll-checkbox" checked class="form-checkbox">
               <span class="text-sm font-medium leading-6 text-gray-900">Autoscroll</span>
             </label>
-            <button id="clear-button" class="px-4 py-1 bg-red-500 text-white rounded-sm hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50">Clear</button>
+            <button id="clear-button" class="px-4 py-1 bg-amber-500 text-white rounded-sm hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-opacity-50">Clear</button>
           </div>
         </div>
       </div>
-      <div class="font-mono rounded-sm bg-white shadow-xl h-[calc(50vh-70px)] overflow-y-auto border border-gray-300 p-2.5 bg-gray-200 mx-5 mb-5" id="scrollable-element"></div>
+      <div class="font-mono rounded-sm bg-white shadow-xl h-[calc(75vh-70px)] overflow-y-auto border border-gray-300 p-2.5 bg-gray-200 mx-5 mb-5" id="scrollable-element"></div>
     </div>
     <script src="script.js"></script>
   </body>

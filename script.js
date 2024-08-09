@@ -9,6 +9,8 @@ const refreshPorts = document.getElementById('refresh-ports');
 const scrollableElement = document.getElementById('scrollable-element');
 const select = document.getElementById('serial-select');
 
+let isPortConnected = false;
+let controller;
 let autoscroll = true;
 let serialPorts = [];
 let reader;
@@ -36,26 +38,33 @@ clearButton.addEventListener('click', () => {
 connectButton.addEventListener('click', async () => {
     const selectedPort = serialPorts[select.selectedIndex]
     const baudRate = Math.round(baud.value)
-    if (selectedPort) {
+    if (!isPortConnected) {
         await connectToSerialPort(selectedPort, baudRate);
+    } else {
+        isPortConnected = false;
     }
 });
 
 refreshPorts.addEventListener('click', async () => {
-    while (select.children.length > 1) {
-        select.removeChild(select.lastChild);
-    }
-
     ports = await navigator.serial.getPorts();
-
-    console.log(ports)
-    ports.forEach(port => {
-        const option = buildPortOption(port)
-        select.appendChild(option);
-    });
+    serialPorts = ports
+    updateSerialSelect(ports)
 });
 
 // Functions
+function onPortConnect() {
+    connectButton.classList.remove('bg-emerald-500', 'hover:bg-emerald-600', 'focus:ring-emerald-500');
+    connectButton.classList.add('bg-red-500', 'hover:bg-red-600', 'focus:ring-red-500');
+    connectButton.textContent = 'Disconnect';
+}
+
+function onPortDisconnect() {
+    connectButton.classList.remove('bg-red-500', 'hover:bg-red-600', 'focus:ring-red-500');
+    connectButton.classList.add('bg-emerald-500', 'hover:bg-emerald-600', 'focus:ring-emerald-500');
+    connectButton.textContent = 'Connect';
+}
+
+
 function buildPortOption(port) {
     const option = document.createElement('option');
     option.value = port;
@@ -94,14 +103,20 @@ function scrollToBottom() {
 // Async Functions
 async function connectToSerialPort(port, baud) {
     await port.open({ baudRate: baud });
+    onPortConnect()
+
     let buffer = ''
+    // The TextDecoderStream interface of the Encoding API converts a stream of text in a binary encoding,
+    // such as UTF-8 etc., to a stream of strings
     const textDecoder = new TextDecoderStream();
     const readableStreamClosed = port.readable.pipeTo(textDecoder.writable);
-    const reader = textDecoder.readable.getReader();
-
+    reader = textDecoder.readable.getReader();
+    controller = new AbortController();
+    const signal = controller.signal;
     try {
-        while (true) {
-            const { value, done } = await reader.read();
+        isPortConnected = true;
+        while (isPortConnected) {
+            const { value, done } = await reader.read({ signal });
             if (done) {
                 break;
             }
@@ -119,9 +134,26 @@ async function connectToSerialPort(port, baud) {
     } catch (error) {
         console.error('Error reading data from serial port:', error);
     } finally {
+        controller.abort();
+
         reader.releaseLock();
-        await readableStreamClosed.catch(() => { });
-        await port.close();
+        try {
+            await textDecoder.readable.cancel();
+        } catch (error) {
+            console.error("Error encountered in readableStreamClosed:", error);
+        }
+
+        try {
+            await readableStreamClosed;
+        } catch (error) {
+        }
+
+        try {
+            await port.close();
+        } catch (error) {
+            console.error("Error encountered closing port:", error);
+        }
+        onPortDisconnect()
     }
 }
 
@@ -133,9 +165,9 @@ async function updateSerialSelect(ports) {
         select.appendChild(option)
         return;
     }
+    select.innerHTML = ''
     ports.forEach(port => {
         const option = buildPortOption(port)
         select.appendChild(option);
     });
-    select.removeChild(select.firstElementChild);
 }

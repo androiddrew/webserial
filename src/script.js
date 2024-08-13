@@ -8,12 +8,18 @@ const connectButton = document.getElementById('connect-button')
 const refreshPorts = document.getElementById('refresh-ports');
 const scrollableElement = document.getElementById('scrollable-element');
 const select = document.getElementById('serial-select');
+const transmitInput = document.querySelector('div[contenteditable="true"]');
+const transmitButton = document.getElementById('transmit-button');
+const uPyKeyboardInterrupt = new Uint8Array([13, 3, 3])
 
 let isPortConnected = false;
 let controller;
 let autoscroll = true;
 let serialPorts = [];
+
+let encoder;
 let reader;
+let writer;
 
 // Event Listeners
 addPort.addEventListener('click', async () => {
@@ -42,6 +48,7 @@ connectButton.addEventListener('click', async () => {
         await connectToSerialPort(selectedPort, baudRate);
     } else {
         isPortConnected = false;
+        onPortDisconnect();
     }
 });
 
@@ -51,7 +58,35 @@ refreshPorts.addEventListener('click', async () => {
     updateSerialSelect(ports)
 });
 
+transmitButton.addEventListener('click', async (event) => {
+    transmitContents(transmitInput.innerText)
+    transmitInput.innerHTML = ''
+});
+
+transmitInput.addEventListener('keydown', (event) => {
+    if (event.key === 'c' && event.ctrlKey) {
+        event.preventDefault();
+        console.log("Sending interrupt ", uPyKeyboardInterrupt)
+        writer.write(uPyKeyboardInterrupt);
+    }
+});
+
+transmitInput.addEventListener('keyup', (event) => {
+    if (event.key === 'Enter' && !event.shiftKey) {
+        transmitContents(transmitInput.innerText);
+        transmitInput.innerHTML = ''
+    }
+});
+
+
 // Functions
+function transmitContents(input) {
+    encoded_string = encoder.encode(input + '\r')
+    console.log("Binary Contents: ", encoded_string)
+    writer.write(encoded_string)
+}
+
+
 function onPortConnect() {
     connectButton.classList.remove('bg-emerald-500', 'hover:bg-emerald-600', 'focus:ring-emerald-500');
     connectButton.classList.add('bg-red-500', 'hover:bg-red-600', 'focus:ring-red-500');
@@ -108,16 +143,24 @@ async function connectToSerialPort(port, baud) {
     let buffer = ''
     // The TextDecoderStream interface of the Encoding API converts a stream of text in a binary encoding,
     // such as UTF-8 etc., to a stream of strings
+    // const textEncoder = new TextEncoderStream();
+    // const writableStreamClosed = textEncoder.readable.pipeTo(port.writable);
+    // writer = textEncoder.writable.getWriter();
+
+    encoder = new TextEncoder()
+    writer = port.writable.getWriter();
+
     const textDecoder = new TextDecoderStream();
     const readableStreamClosed = port.readable.pipeTo(textDecoder.writable);
     reader = textDecoder.readable.getReader();
+
     controller = new AbortController();
     const signal = controller.signal;
     try {
         isPortConnected = true;
         while (isPortConnected) {
             const { value, done } = await reader.read({ signal });
-            if (done) {
+            if (done || !port.readable) {
                 break;
             }
 
@@ -134,13 +177,27 @@ async function connectToSerialPort(port, baud) {
     } catch (error) {
         console.error('Error reading data from serial port:', error);
     } finally {
+        // Port cleanup
         controller.abort();
-
+        writer.releaseLock();
         reader.releaseLock();
+
+        // try {
+        //     writer.close();
+        //     await writableStreamClosed;
+        // } catch (error) {
+        //     console.error("Error encountered in writeableSteamClosed:", error)
+        // }
+
         try {
-            await textDecoder.readable.cancel();
+            reader.cancel();
         } catch (error) {
             console.error("Error encountered in readableStreamClosed:", error);
+        }
+
+        try {
+            await readableStreamClosed;
+        } catch (error) {
         }
 
         try {

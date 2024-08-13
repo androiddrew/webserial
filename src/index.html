@@ -6,12 +6,6 @@
     <title>Web Serial Console</title>
     <link rel="icon" type="image/x-icon" href="./favicon.ico">
     <link rel="stylesheet" type="text/css" href="./main.css">
-    <style>
-      select:focus {
-        outline: none;
-        box-shadow: none;
-      }
-    </style>
   </head>
   <body class="min-h-screen m-0 p-0 bg-gradient-to-b from-neutral-100 to-neutral-50 dark:bg-slate-900">
     <div class="flex flex-col h-3/4" id="container">
@@ -60,7 +54,52 @@
           </div>
         </div>
       </div>
-      <div class="font-mono rounded-md bg-white shadow-xl h-[calc(75vh-70px)] overflow-y-auto border border-gray-300 p-2.5 bg-gray-200 mx-5 mb-5" id="scrollable-element"></div>
+      <div class="font-mono rounded-md bg-white shadow-xl h-[calc(75vh-70px)] overflow-y-auto border border-gray-300 p-2.5 bg-gray-200 mx-5 mb-6  " id="scrollable-element"></div>
+    <!-- Transmit OLD-->
+      <!-- <div class="flex items-center space-x-2 px-5 mb-5">
+        <input type="text" id="transmit-input" class="font-mono flex-grow font-medium bg-white rounded-md py-1.5 px-3 border-0 border-gray-300 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-emerald-500 sm:text-sm sm:leading-6" placeholder="Enter text to send...">
+        <button id="transmit-button" class="relative inline-flex items-center gap-x-1.5 px-4 py-1.5 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+          <svg class="-ml-0.5 h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M2 3.75A.75.75 0 012.75 3h11.5a.75.75 0 010 1.5H2.75A.75.75 0 012 3.75zM2 7.5a.75.75 0 01.75-.75h6.365a.75.75 0 010 1.5H2.75A.75.75 0 012 7.5zM14 7a.75.75 0 01.55.24l3.25 3.5a.75.75 0 11-1.1 1.02l-1.95-2.1v6.59a.75.75 0 01-1.5 0V9.66l-1.95 2.1a.75.75 0 11-1.1-1.02l3.25-3.5A.75.75 0 0114 7zM2 11.25a.75.75 0 01.75-.75H7A.75.75 0 017 12H2.75a.75.75 0 01-.75-.75z" clip-rule="evenodd" />
+          </svg>
+          Send</button>
+      </div> -->
+    <!-- End Transmit OLD-->
+      <!-- Experiment -->
+      <div class="flex items-center space-x-2 px-5 mb-5">
+        <div contenteditable="true" class="shadow-xl flex-grow rounded-md font-mono py-1.5 px-3 ring-1 ring-inset ring-gray-300 text-gray-900 outline-none focus:ring-2 focus:ring-emerald-500">
+          <p data-placeholder="Enter text to send..." class="empty:before:content-[attr(data-placeholder)] empty:before:text-gray-500"></p>
+        </div>
+        <button id="transmit-button" class="shadow-xl relative inline-flex items-center gap-x-1.5 px-4 py-1.5 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+          <svg class="-ml-0.5 h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M2 3.75A.75.75 0 012.75 3h11.5a.75.75 0 010 1.5H2.75A.75.75 0 012 3.75zM2 7.5a.75.75 0 01.75-.75h6.365a.75.75 0 010 1.5H2.75A.75.75 0 012 7.5zM14 7a.75.75 0 01.55.24l3.25 3.5a.75.75 0 11-1.1 1.02l-1.95-2.1v6.59a.75.75 0 01-1.5 0V9.66l-1.95 2.1a.75.75 0 11-1.1-1.02l3.25-3.5A.75.75 0 0114 7zM2 11.25a.75.75 0 01.75-.75H7A.75.75 0 017 12H2.75a.75.75 0 01-.75-.75z" clip-rule="evenodd" />
+          </svg>
+          Send
+        </button>
+      </div> 
+
+      <!-- <div class="flex items-center space-x-2 px-5 mb-5">
+        <div aria-label="Enter text to send..." class="flex-grow mt-1 max-h-96 w-full overflow-y-auto break-words">
+          <div contenteditable="true" translate="no" enterkeyhint="enter" tabindex="0" 
+               class="font-mono flex-grow font-medium bg-white rounded-md py-1.5 px-3 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-emerald-500 sm:text-sm sm:leading-6 break-words max-w-[60ch]">
+            <p data-placeholder="Enter text to send..." 
+               class="m-0 text-gray-900 focus:outline-none empty:before:content-[attr(data-placeholder)] empty:before:text-gray-500">
+            </p>
+          </div>
+        </div>
+        <button id="transmit-button" class="relative inline-flex items-center gap-x-1.5 px-4 py-1.5 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+          <svg class="-ml-0.5 h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M2 3.75A.75.75 0 012.75 3h11.5a.75.75 0 010 1.5H2.75A.75.75 0 012 3.75zM2 7.5a.75.75 0 01.75-.75h6.365a.75.75 0 010 1.5H2.75A.75.75 0 012 7.5zM14 7a.75.75 0 01.55.24l3.25 3.5a.75.75 0 11-1.1 1.02l-1.95-2.1v6.59a.75.75 0 01-1.5 0V9.66l-1.95 2.1a.75.75 0 11-1.1-1.02l3.25-3.5A.75.75 0 0114 7zM2 11.25a.75.75 0 01.75-.75H7A.75.75 0 017 12H2.75a.75.75 0 01-.75-.75z" clip-rule="evenodd" />
+          </svg>
+          Send
+        </button>
+      </div> -->
+       <!-- End experiment -->
+      <!-- <div aria-label="Enter text to send..." class="mt-1 max-h-96 w-full overflow-y-auto break-words">
+        <div contenteditable="true" translate="no" enterkeyhint="enter" tabindex="0" class="break-words max-w-[60ch]">
+           <p data-placeholder="Enter text to send..." class="text-gray-900 ring-1 ring-gray-300 font-mono ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-emerald-500 is-empty is-editor-empty before:!text-text-500 before:whitespace-nowrap"><br class="ProseMirror-trailingBreak"></p>
+        </div>
+     </div> -->
     </div>
     <footer>
       <div class="mx-auto max-w-7xl overflow-hidden py-12 px-4 sm:px-6 lg:px-8">

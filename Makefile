@@ -1,5 +1,5 @@
 serve:
-	python3 -m http.server 8080
+	npx vite
 .PHONY: serve
 
 watch:
@@ -7,7 +7,7 @@ watch:
 .PHONY: watch
 
 build:
-	echo "Not implemented yet..."
+	npx vite build --emptyOutDir
 .PHONY: build
 
 image:

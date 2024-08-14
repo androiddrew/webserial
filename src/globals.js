@@ -64,8 +64,10 @@ export function setWriter(newWriter) {
 // expose some globals for debuggin in webconsole
 if (typeof window !== 'undefined') {
     window.wsc = {
-        isPortConnected,
-        autoscroll,
-        serialPorts,
+        get isPortConnected() { return isPortConnected; },
+        get autoscroll() { return autoscroll; },
+        get serialPorts() { return serialPorts; },
+        get reader() { return reader; },
+        get writer() { return writer; }
     };
 }

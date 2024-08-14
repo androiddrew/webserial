@@ -34,6 +34,7 @@ export function setupEventListeners() {
         } else {
             console.log("Disconnecting from port...")
             globals.setPortConnected(false);
+            globals.reader.cancel();
             onPortDisconnect();
         }
     });

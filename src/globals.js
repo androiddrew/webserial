@@ -1,4 +1,4 @@
-export const addDeviceMessage = `Add a device...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`;
+export const addDeviceMessage = `Add a device...         `;
 export const addPort = document.getElementById('add-port');
 export const autoscrollCheckbox = document.getElementById('autoscroll-checkbox');
 export const baud = document.getElementById('baud');

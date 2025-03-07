@@ -6,7 +6,7 @@ This is a work in progress and a learning experiment. Feel free to file an issue
 
 ## Local Development:
 
-A basic http server can be run using `make serve`. 
+Local development utilizes the [Vite](https://vitejs.dev/). To run the development server use `make serve`.
 
 **Additional Instructions TBD**
 
